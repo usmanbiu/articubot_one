@@ -1,0 +1,1 @@
+/home/adminusr/ros2_ws/ros-controls/ros2_control_demos/example_7/bringup/launch/r6bot_controller.launch.py

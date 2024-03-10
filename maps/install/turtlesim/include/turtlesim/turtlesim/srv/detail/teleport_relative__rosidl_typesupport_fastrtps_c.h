@@ -1,0 +1,1 @@
+/home/adminusr/ros2_ws/build/turtlesim/rosidl_typesupport_fastrtps_c/turtlesim/srv/detail/teleport_relative__rosidl_typesupport_fastrtps_c.h
