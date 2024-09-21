@@ -38,7 +38,7 @@ def generate_launch_description():
     spawn_entity = Node(package='gazebo_ros', 
                         executable='spawn_entity.py',
                         arguments=['-topic', 'robot_description',
-                                   '-entity', 'my_bot'],
+                                   '-entity', 'my_bot', '-x', '0.0', '-y', '0.0', '-z', '0.0', '-R', '0.0', '-P', '0.0', '-Y', '0.0' ],
                         output='screen')
 
     diff_drive_spawner = Node(

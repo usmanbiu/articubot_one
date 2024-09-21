@@ -1,8 +1,7 @@
-# Copyrights and owner : https://github.com/introlab/rtabmap_ros/tree/humble-devel/launch
 # Requirements:
 #   Install Turtlebot3 packages
 #   Modify turtlebot3_waffle SDF:
-#     1) Edit turtlebot3_gazebo/models/turtlebot3_waffle/model.sdf
+#     1) Edit /opt/ros/$ROS_DISTRO/share/turtlebot3_gazebo/models/turtlebot3_waffle/model.sdf
 #     2) Add
 #          <joint name="camera_rgb_optical_joint" type="fixed">
 #            <parent>camera_rgb_frame</parent>
@@ -11,21 +10,22 @@
 #            <axis>
 #              <xyz>0 0 1</xyz>
 #            </axis>
-#          </joint>
+#          </joint> 
 #     3) Rename <link name="camera_rgb_frame"> to <link name="camera_rgb_optical_frame">
 #     4) Add <link name="camera_rgb_frame"/>
 #     5) Change <sensor name="camera" type="camera"> to <sensor name="camera" type="depth">
 #     6) Change image width/height from 1920x1080 to 640x480
-#     7) Note that we can increase min scan range from 0.12 to 0.2 to avoid having scans
+#     7) Note that we can increase min scan range from 0.12 to 0.2 to avoid having scans 
 #        hitting the robot itself
 # Example:
 #   $ export TURTLEBOT3_MODEL=waffle
 #   $ ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 #
 #   SLAM:
-#   $ ros2 launch rtabmap_ros turtlebot3_rgbd.launch.py
+#   $ ros2 launch rtabmap_demos turtlebot3_rgbd.launch.py
 #   OR
-#   $ ros2 launch rtabmap_ros rtabmap.launch.py visual_odometry:=false frame_id:=base_footprint odom_topic:=/odom args:="-d" use_sim_time:=true rgb_topic:=/camera/image_raw depth_topic:=/camera/depth/image_raw camera_info_topic:=/camera/camera_info approx_sync:=true
+#   $ ros2 launch rtabmap_launch rtabmap.launch.py visual_odometry:=false frame_id:=base_footprint odom_topic:=/odom args:="-d" use_sim_time:=true rgb_topic:=/camera/image_raw depth_topic:=/camera/depth/image_raw camera_info_topic:=/camera/camera_info approx_sync:=true qos:=2
+#   $ ros2 run topic_tools relay /rtabmap/map /map
 #
 #   Navigation (install nav2_bringup package):
 #     $ ros2 launch nav2_bringup navigation_launch.py use_sim_time:=True
@@ -48,42 +48,39 @@ def generate_launch_description():
 
     parameters={
           'frame_id':'base_footprint',
-          'visual_odometry' :'false',
           'use_sim_time':use_sim_time,
           'subscribe_depth':True,
-          #'approx_sync' :True,
-          'Reg/Strategy':'1',
           'use_action_for_goal':True,
           'qos_image':qos,
           'qos_imu':qos,
-          'Reg/Force3DoF' :'true',
-          #'RGBD/NeighborLinkRefining' :'True',
-          'Optimizer/GravitySigma':'0' # Disable imu constraints (we are already in 2D)
+          'visual_odometry':False,
+          'depth':False,
+          'Reg/Force3DoF':True,
+          'Optimizer/GravitySigma':0 # Disable imu constraints (we are already in 2D)
     }
 
     remappings=[
           ('rgb/image', '/camera/image_raw'),
           ('rgb/camera_info', '/camera/camera_info'),
           ('depth/image', '/camera/depth/image_raw')]
-        
 
     return LaunchDescription([
 
         # Launch arguments
         DeclareLaunchArgument(
             'use_sim_time', default_value='true',
-            description='Use simulation (Gazebo) clodck if true'),
-
+            description='Use simulation (Gazebo) clock if true'),
+        
         DeclareLaunchArgument(
-            'qos', default_value='1',
+            'qos', default_value='2',
             description='QoS used for input sensor topics'),
-
+            
         DeclareLaunchArgument(
-            'localization', default_value='true',
+            'localization', default_value='false',
             description='Launch in localization mode.'),
 
         # Nodes to launch
-
+        
         # SLAM mode:
         Node(
             condition=UnlessCondition(localization),
@@ -91,7 +88,7 @@ def generate_launch_description():
             parameters=[parameters],
             remappings=remappings,
             arguments=['-d']), # This will delete the previous database (~/.ros/rtabmap.db)
-
+            
         # Localization mode:
         Node(
             condition=IfCondition(localization),
