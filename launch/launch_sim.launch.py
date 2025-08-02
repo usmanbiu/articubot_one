@@ -42,15 +42,15 @@ def generate_launch_description():
 
     #gazebo_params_file = os.path.join(get_package_share_directory(package_name),'config','gazebo_params.yaml')
 
-        default_world = os.path.join(
+    default_world = os.path.join(
             get_package_share_directory(package_name),
             'worlds',
             'empty.world'
         )
     
-        world = LaunchConfiguration('world')
+    world = LaunchConfiguration('world')
 
-        world_arg = DeclarelAunchArgument(
+    world_arg = DeclarelAunchArgument(
             'world',
             default_value = default_world,
             description = 'world to load'
@@ -68,8 +68,9 @@ def generate_launch_description():
     spawn_entity = Node(package='ros_gz_sim', executable='create',
                         arguments=['-topic', 'robot_description',
                                    '-name', 'my_bot',
-                                   '-z':'0.1'],
+                                   '-z', '0.1'],
                         output='screen')
+    
 
 
     diff_drive_spawner = Node(
