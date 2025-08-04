@@ -4,20 +4,20 @@
     <joint name="camera_joint" type="fixed">
         <parent link="chassis"/>
         <child link="camera_link"/>
-        <origin xyz="0.276 0 0.181" rpy="0 0.18 0"/>
+        <origin xyz="0.227 0 0.065" rpy="0 0 0"/>
     </joint>
 
     <link name="camera_link">
         <visual>
             <geometry>
-                <box size="0.010 0.03 0.03"/>
+                <box size="0.013 0.063 0.020"/>
             </geometry>
             <material name="black"/>
         </visual>
         <visual>
-            <origin xyz="0 0 -0.05"/>
+            <origin xyz="0.009 0 0" rpy="0 -${pi/2} 0"/>
             <geometry>
-                <cylinder radius="0.002" length="0.1"/>
+                <cylinder radius="0.010" length="0.005"/>
             </geometry>
             <material name="black"/>
         </visual>
