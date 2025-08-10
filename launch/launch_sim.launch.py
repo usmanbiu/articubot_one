@@ -10,6 +10,8 @@ from launch.substitutions import LaunchConfiguration
 
 from launch_ros.actions import Node
 
+from launch.conditions import IfCondition
+
 
 
 def generate_launch_description():
@@ -20,10 +22,19 @@ def generate_launch_description():
 
     package_name='articubot_one' #<--- CHANGE ME
 
+        # Launch argument for ros2_control selection
+    use_ros2_control = LaunchConfiguration('use_ros2_control')
+
+    use_ros2_control_arg = DeclareLaunchArgument(
+        'use_ros2_control',
+        default_value='false',
+        description='Whether to use ros2_control or Gazebo PID control'
+    )
+
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory(package_name),'launch','rsp.launch.py'
-                )]), launch_arguments={'use_sim_time': 'true', 'use_ros2_control': 'true'}.items()
+                )]), launch_arguments={'use_sim_time': 'true', 'use_ros2_control': use_ros2_control}.items()
     )
 
     joystick = IncludeLaunchDescription(
@@ -66,7 +77,7 @@ def generate_launch_description():
     spawn_entity = Node(package='ros_gz_sim', executable='create',
                         arguments=['-topic', 'robot_description',
                                    '-name', 'my_bot',
-                                   '-z', '0.1'],
+                                   '-z', '0.2'],
                         output='screen')
 
 
@@ -74,12 +85,14 @@ def generate_launch_description():
         package="controller_manager",
         executable="spawner",
         arguments=["diff_cont"],
+        condition=IfCondition(use_ros2_control)
     )
 
     joint_broad_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["joint_broad"],
+        condition=IfCondition(use_ros2_control)
     )
 
 
@@ -122,6 +135,7 @@ def generate_launch_description():
 
     # Launch them all!
     return LaunchDescription([
+        use_ros2_control_arg,
         rsp,
         joystick,
         twist_mux,

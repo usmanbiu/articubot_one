@@ -28,8 +28,8 @@
                 <cylinder radius="0.022" length="0.018"/>
             </geometry>
         </collision>
-        <xacro:inertial_cylinder mass="0.1" length="0.018" radius="022">
-            <origin xyz="0 0 0" rpy="0 0 0"/>
+        <xacro:inertial_cylinder mass="0.1" length="0.018" radius="0.022">
+            <origin xyz="0 0 0.003" rpy="0 0 0"/>
         </xacro:inertial_cylinder>
     </link>
 

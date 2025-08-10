@@ -54,7 +54,7 @@
                     <far>8.0</far>
                 </clip>
             </camera>
-            <topic>camara/image_raw</topic>
+            <topic>camera/image_raw</topic>
             <gz_frame_id>camera_link_optical</gz_frame_id>
         </sensor>
     </gazebo>
