@@ -27,7 +27,7 @@ def generate_launch_description():
 
     use_ros2_control_arg = DeclareLaunchArgument(
         'use_ros2_control',
-        default_value='false',
+        default_value='true',
         description='Whether to use ros2_control or Gazebo PID control'
     )
 
