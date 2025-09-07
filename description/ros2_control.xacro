@@ -2,8 +2,9 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     
-    <xacro:epmc_ros2_control name="epmc_ros2_control"/>
+
     <xacro:unless value="$(arg sim_mode)">
+        <xacro:macro name="epmc_ros2_control" params="name">
         <ros2_control name="${name}_front" type="system">
             <hardware>
                 <plugin>epmc_ros_hw_plugin/EPMCHardwareInterface</plugin>
@@ -59,6 +60,8 @@
                 <state_interface name="velocity"/>
             </joint>
         </ros2_control>
+         </xacro:macro>
+        <xacro:epmc_ros2_control name="epmc_ros2_control"/>
     </xacro:unless>
 
     <xacro:if value="$(arg sim_mode)">
