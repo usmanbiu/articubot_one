@@ -2,14 +2,14 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     
-    <xacro:macro name="tetris" params="name"/>
+    <xacro:epmc_ros2_control name="epmc_ros2_control"/>
     <xacro:unless value="$(arg sim_mode)">
         <ros2_control name="${name}_front" type="system">
             <hardware>
                 <plugin>epmc_ros_hw_plugin/EPMCHardwareInterface</plugin>
                 <param name="motorA_wheel_name">front_left_wheel_joint</param>
                 <param name="motorB_wheel_name">front_right_wheel_joint</param>
-                <param name="port">/dev/serial/by-path/pci-0000:00:14.0-usb-0:1.2:1.0-port0</param>
+                <param name="port">/dev/serial/by-path/platform-xhci-hcd.1-usb-0:2.4:1.0-port0</param>
                 <param name="cmd_vel_timeout_ms">2000</param>
             </hardware>
 
@@ -35,13 +35,13 @@
         <ros2_control name="${name}_rear" type="system">
             <hardware>
                 <plugin>epmc_ros_hw_plugin/EPMCHardwareInterface</plugin>
-                <param name="motorA_wheel_name">rear_left_wheel_joint</param>
-                <param name="motorB_wheel_name">rear_right_wheel_joint</param>
-                <param name="port">/dev/serial/by-path/pci-0000:00:14.0-usb-0:1.1:1.0-port0</param>
+                <param name="motorA_wheel_name">left_wheel_joint</param>
+                <param name="motorB_wheel_name">right_wheel_joint</param>
+                <param name="port">/dev/serial/by-path/platform-xhci-hcd.1-usb-0:2.3:1.0-port0</param>
                 <param name="cmd_vel_timeout_ms">2000</param>
             </hardware>
 
-            <joint name="rear_left_wheel_joint">
+            <joint name="left_wheel_joint">
                 <command_interface name="velocity">
                     <param name="min">-10.0</param>
                     <param name="max">10.0</param>
@@ -50,7 +50,7 @@
                 <state_interface name="velocity"/>
             </joint>
 
-            <joint name="rear_right_wheel_joint">
+            <joint name="right_wheel_joint">
                 <command_interface name="velocity">
                     <param name="min">-10.0</param>
                     <param name="max">10.0</param>
